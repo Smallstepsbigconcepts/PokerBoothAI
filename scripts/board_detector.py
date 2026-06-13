@@ -68,8 +68,6 @@ def read_rank(card_crop):
 
 def card_exists(card_crop):
 
-    # Board cards have a large colored/gray vertical card body.
-    # Empty slots/logo text may have bright pixels, but not enough card-shaped area.
     hsv = cv2.cvtColor(card_crop, cv2.COLOR_BGR2HSV)
 
     saturation = hsv[:, :, 1]
@@ -77,12 +75,19 @@ def card_exists(card_crop):
 
     colored_pixels = ((saturation > 40) & (value > 80)).sum()
     bright_pixels = (value > 120).sum()
+    mid_pixels = ((value > 45) & (value < 130)).sum()
+
     total_pixels = value.size
 
     colored_ratio = colored_pixels / total_pixels
     bright_ratio = bright_pixels / total_pixels
+    mid_ratio = mid_pixels / total_pixels
 
-    return colored_ratio > 0.22 or bright_ratio > 0.38
+    return (
+        colored_ratio > 0.22
+        or bright_ratio > 0.15
+        or mid_ratio > 0.35
+    )
 
 
 def extract_board_cards(frame):
