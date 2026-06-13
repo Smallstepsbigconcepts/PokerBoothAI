@@ -13,6 +13,7 @@ BOARD_SLOTS = {
     "board5": (725, 365, 785, 455),
 }
 
+
 def normalize_rank(text):
 
     if text is None:
@@ -77,6 +78,9 @@ def extract_board_cards(frame):
 
         rank = read_rank(crop)
 
-        cards.append(rank)
+        cards.append({
+            "slot": slot_name,
+            "rank": rank
+        })
 
     return cards
