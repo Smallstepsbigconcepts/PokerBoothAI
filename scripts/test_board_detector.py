@@ -1,4 +1,8 @@
 import cv2
+import sys
+import os
+
+sys.path.append(os.path.dirname(__file__))
 
 from board_detector import extract_board_cards
 
@@ -8,4 +12,5 @@ frame = cv2.imread(image_path)
 
 cards = extract_board_cards(frame)
 
-print(cards)
+for card in cards:
+    print(card)
