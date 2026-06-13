@@ -84,3 +84,28 @@ def extract_board_cards(frame):
         })
 
     return cards
+
+
+def extract_board_state(frame):
+
+    cards = extract_board_cards(frame)
+
+    ranks = [
+        card["rank"]
+        for card in cards
+    ]
+
+    visible = [
+        rank for rank in ranks
+        if rank != "?"
+    ]
+
+    board_state = {
+        "cards": ranks,
+        "visible_count": len(visible),
+        "flop": visible[:3] if len(visible) >= 3 else [],
+        "turn": visible[3] if len(visible) >= 4 else None,
+        "river": visible[4] if len(visible) >= 5 else None,
+    }
+
+    return board_state
