@@ -66,6 +66,20 @@ def read_rank(card_crop):
     return normalize_rank(result[0])
 
 
+def card_exists(card_crop):
+
+    # Board cards are bright colored rectangles.
+    # Empty board slots are dark table/logo background.
+    gray = cv2.cvtColor(card_crop, cv2.COLOR_BGR2GRAY)
+
+    bright_pixels = (gray > 80).sum()
+    total_pixels = gray.size
+
+    bright_ratio = bright_pixels / total_pixels
+
+    return bright_ratio > 0.18
+
+
 def extract_board_cards(frame):
 
     cards = []
@@ -76,7 +90,10 @@ def extract_board_cards(frame):
 
         crop = frame[y1:y2, x1:x2]
 
-        rank = read_rank(crop)
+        if card_exists(crop):
+            rank = read_rank(crop)
+        else:
+            rank = "?"
 
         cards.append({
             "slot": slot_name,
