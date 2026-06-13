@@ -122,6 +122,11 @@ def extract_board_state(frame):
         for card in cards
     ]
 
+    # Real board cards appear from left to right.
+    # If slot 1 or slot 2 is missing, ignore later false positives from logo/table text.
+    if ranks[0] == "?" or ranks[1] == "?":
+        ranks = ["?", "?", "?", "?", "?"]
+
     visible = [
         rank for rank in ranks
         if rank != "?"
